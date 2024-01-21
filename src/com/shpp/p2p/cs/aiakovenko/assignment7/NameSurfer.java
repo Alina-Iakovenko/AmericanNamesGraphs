@@ -18,8 +18,9 @@ public class NameSurfer extends SimpleProgram implements NameSurferConstants {
     private JButton clearButton;
     private JButton graphButton;
     private JTextField nameField;
-    private int textWidth = NameSurferConstants.APPLICATION_WIDTH / 20;
     private NameSurferGraph graph;
+
+    /* Instance of NameSurferDataBase with a database for names */
     NameSurferDataBase dataBase = new NameSurferDataBase(NAMES_DATA_FILE);
 
     /**
@@ -30,6 +31,7 @@ public class NameSurfer extends SimpleProgram implements NameSurferConstants {
         /* Add in a title. */
         add(new JLabel("Name"), NORTH);
 
+        int textWidth = NameSurferConstants.APPLICATION_WIDTH / 20;
         nameField = new JTextField(textWidth);
         add(nameField, NORTH);
 
@@ -39,10 +41,11 @@ public class NameSurfer extends SimpleProgram implements NameSurferConstants {
         clearButton = new JButton("Clear");
         add(clearButton, NORTH);
 
-        addActionListeners();
-
+        /* Add component for painting graphs */
         graph = new NameSurferGraph();
         add(graph);
+
+        addActionListeners();
     }
 
     /* Method: actionPerformed(e) */
@@ -54,12 +57,17 @@ public class NameSurfer extends SimpleProgram implements NameSurferConstants {
      */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == graphButton) {
+            // get text that user printed in text field
             String name = nameField.getText();
-            NameSurferEntry lineInDataBase = dataBase.findEntry(name);
-            graph.addEntry(lineInDataBase);
+            // check if there is such a name in database file and create an instance for it
+            NameSurferEntry nameInfo = dataBase.findEntry(name);
+            // add info to LinkedHashMap - collection of instance to print
+            graph.addEntry(nameInfo);
+            // display info in the window
             graph.update();
         } else if (e.getSource() == clearButton) {
-            graph.clear(); // from NameSurferGraph
+            // method from the class NameSurferGraph to reset all names and graphs for them
+            graph.clear();
         }
     }
 }

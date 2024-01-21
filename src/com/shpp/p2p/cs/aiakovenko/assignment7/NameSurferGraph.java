@@ -22,12 +22,20 @@ import static acm.util.JTFTools.pause;
 
 public class NameSurferGraph extends GCanvas
         implements NameSurferConstants, ComponentListener {
+    // The horizontal line on the top
     GLine topLine;
+    // The horizontal line on the bottom
     GLine bottomLine;
+    // Vertical lines for every decade
     GLine[] decadeLines = new GLine[NDECADES];
+    // Text with a year of beginning for every decade
     GLabel[] decadeLabels = new GLabel[NDECADES];
+
+    // Collection for names from user to print
     LinkedHashMap<String, int[]> entryDataSet = new LinkedHashMap<>();
+    // Collection for all labels to print
     LinkedHashMap<String, GLabel[]> labels = new LinkedHashMap<>();
+    // Collection for all lines to print
     LinkedHashMap<String, GLine[]> graphs = new LinkedHashMap<>();
 
     /**
@@ -44,6 +52,7 @@ public class NameSurferGraph extends GCanvas
      */
     public void clear() {
         if (entryDataSet != null) {
+            // method from the class LinkedHashMap to clear the collection
             entryDataSet.clear();
             update();
         }
@@ -59,14 +68,19 @@ public class NameSurferGraph extends GCanvas
      */
     public void addEntry(NameSurferEntry entry) {
         try {
+            // Get name with the method from the NameSurferEntry class
             String name = entry.getName();
+            // Create an array for ranks for the name
             int[] ranks = new int[NDECADES];
 
+            // Get ranks for the name with the method from the NameSurferEntry class
             for (int i = 0; i < NDECADES; i++) {
                 ranks[i] = entry.getRank(i);
             }
+            // Add info to LinkedHashMap if there isn't the same
             entryDataSet.putIfAbsent(name, ranks);
         } catch (NullPointerException e) {
+            // throw an exception if there isn't such a name in the database
             throw new NullPointerException("No match in data base for this name");
         }
     }
@@ -80,134 +94,47 @@ public class NameSurferGraph extends GCanvas
      * the size of the canvas changes.
      */
     public void update() {
+        /* Print to horizontal lines (there will be graphs between them)
+        * and vertical lines for each decade and year of the beginning
+        */
+        createDecadesTable();
+        // Print info for names (graphs and name with rank for every decade)
+        createGraphsOnDecadesTable();
+    }
+
+    /**
+     * Print or reprint vertical lines for each decade
+     * and year of the beginning according to window size
+     * */
+    private void createDecadesTable() {
+        // calculate the distance between vertical lines according to actual window width
+        double distanceBetweenDecades = getWidth() / NDECADES;
+        // Create horizontal top line
         topLine = new GLine(0, GRAPH_MARGIN_SIZE, getWidth(), GRAPH_MARGIN_SIZE);
         topLine.setColor(Color.BLACK);
         add(topLine);
 
+        // If there is a bottom line - remove it
         if (bottomLine != null) {
             remove(bottomLine);
         }
+        // and then create a new one in the appropriate place and size
         bottomLine = new GLine(0, getHeight() - GRAPH_MARGIN_SIZE, getWidth(), getHeight() - GRAPH_MARGIN_SIZE);
         bottomLine.setColor(Color.BLACK);
         add(bottomLine);
 
-        createDecadesTable();
-        createGraphsOnDecadesTable();
-    }
-
-    private void createGraphsOnDecadesTable() {
-        if (!(labels.isEmpty()) || !(graphs.isEmpty())) {
-            clearTheTable();
-        }
-
-        createInstancesForDisplay();
-
-        if (!(labels.isEmpty()) || !(graphs.isEmpty())) {
-            displayInWindow();
-        }
-    }
-
-    private void createInstancesForDisplay() {
-        double stepForRankGraph = (bottomLine.getY() - topLine.getY()) / MAX_RANK;
-        int colorIndex = 0;
-
-        labels = new LinkedHashMap<>();
-        graphs = new LinkedHashMap<>();
-
-        Set<String> keys = entryDataSet.keySet();
-        for (String key : keys) {
-            GLabel[] labelsForName = new GLabel[NDECADES];
-            GLine[] linesForNamesGraph = new GLine[NDECADES];
-
-            double[] yCoordinates = new double[NDECADES];
-            for (int i = 0; i < NDECADES; i++) {
-                if (entryDataSet.get(key)[i] == 0) {
-                    yCoordinates[i] = bottomLine.getY();
-                } else {
-                    yCoordinates[i] = topLine.getY() + entryDataSet.get(key)[i] * stepForRankGraph;
-                }
-            }
-
-            for (int i = 0; i < NDECADES - 1; i++) {
-                double x1 = decadeLines[i].getX();
-                double y1 = yCoordinates[i];
-                labelsForName[i] = new GLabel(key + " " + entryDataSet.get(key)[i], x1, y1);
-                labelsForName[i].setColor(setColorForName(colorIndex));
-
-                double x2 = decadeLines[i + 1].getX();
-                double y2= yCoordinates[i+1];
-                linesForNamesGraph[i] = new GLine(x1, y1, x2, y2);
-                linesForNamesGraph[i].setColor(setColorForName(colorIndex));
-            }
-            double x1 = decadeLines[NDECADES - 1].getX();
-            double y1 = yCoordinates[NDECADES - 1];
-            labelsForName[NDECADES - 1] = new GLabel(key + " " + entryDataSet.get(key)[NDECADES - 1], x1, y1);
-            labelsForName[NDECADES - 1].setColor(setColorForName(colorIndex));
-
-            double x2 = decadeLines[NDECADES - 2].getX();
-            double y2 = yCoordinates[NDECADES - 2];
-            linesForNamesGraph[NDECADES - 1] = new GLine(x1, y1, x2, y2);
-            linesForNamesGraph[NDECADES - 1].setColor(setColorForName(colorIndex));
-
-            labels.putIfAbsent(key, labelsForName);
-            graphs.putIfAbsent(key, linesForNamesGraph);
-
-            colorIndex++;
-        }
-    }
-
-    private Color setColorForName(int colorIndex) {
-        Color[] color = new Color[4];
-        color[0] = Color.BLUE;
-        color[1] = Color.RED;
-        color[2] = Color.MAGENTA;
-        color[3] = Color.BLACK;
-        colorIndex = colorIndex % color.length;
-        return color[colorIndex];
-    }
-
-    private void displayInWindow() {
-        for (Map.Entry<String, GLabel[]> label : labels.entrySet()) {
-            String keyName = label.getKey();
-            for (GLabel gLabel : labels.get(keyName)) {
-                add(gLabel);
-            }
-        }
-        for (Map.Entry<String, GLine[]> line : graphs.entrySet()) {
-            String keyName = line.getKey();
-            for (GLine gLine : graphs.get(keyName)) {
-                add(gLine);
-            }
-        }
-    }
-
-    private void clearTheTable() {
-        for (Map.Entry<String, GLine[]> entry : graphs.entrySet()) {
-            String keyName = entry.getKey();
-            for (GLine gLine : graphs.get(keyName)) {
-                remove(gLine);
-            }
-        }
-        graphs.clear();
-        for (Map.Entry<String, GLabel[]> entry : labels.entrySet()) {
-            String keyName = entry.getKey();
-            for (GLabel gLabel : labels.get(keyName)) {
-                remove(gLabel);
-            }
-        }
-        labels.clear();
-    }
-
-    private void createDecadesTable() {
-        double distanceBetweenDecades = getWidth() / NDECADES;
+        // for every decade line
         for (int i = 0; i < NDECADES; i++) {
+            // if there is decade line in the window, delete it
             if (decadeLines[i] != null) {
                 remove(decadeLines[i]);
             }
+            // and create a new one
             decadeLines[i] = new GLine(i * distanceBetweenDecades + 2, 0.0, i * distanceBetweenDecades + 2, getHeight());
             decadeLines[i].setColor(Color.BLACK);
             add(decadeLines[i]);
 
+            // and the same process for decade labels
             if (decadeLabels[i] != null) {
                 remove(decadeLabels[i]);
             }
@@ -217,6 +144,201 @@ public class NameSurferGraph extends GCanvas
         }
     }
 
+    /**
+     * Print or reprint graphs and text info for it
+     * (name and rank in the decade) for every name chose by user
+     * */
+    private void createGraphsOnDecadesTable() {
+        // if there is info on the table - delete it
+        if (!(labels.isEmpty()) || !(graphs.isEmpty())) {
+            clearTheTable();
+        }
+        // and create actual in actual sizes
+        createInstancesForDisplay();
+
+        // and add it in the window if there is something to add
+        if (!(labels.isEmpty()) || !(graphs.isEmpty())) {
+            displayInWindow();
+        }
+    }
+
+    /***
+     * Clear the decade table from all info about names
+     */
+    private void clearTheTable() {
+        // remove every graph`s line
+        for (Map.Entry<String, GLine[]> entry : graphs.entrySet()) {
+            String keyName = entry.getKey();
+            for (GLine gLine : graphs.get(keyName)) {
+                remove(gLine);
+            }
+        }
+        graphs.clear(); // and empty collection from info
+
+        // remove every name`s label
+        for (Map.Entry<String, GLabel[]> entry : labels.entrySet()) {
+            String keyName = entry.getKey();
+            for (GLabel gLabel : labels.get(keyName)) {
+                remove(gLabel);
+            }
+        }
+        labels.clear();// and empty collection from info
+    }
+
+    /***
+     * Create all labels and lines for every name to display with the appropriate color
+     */
+    private void createInstancesForDisplay() {
+        // set index for the color for the first name
+        int colorIndex = 0;
+
+        // create instances for every name's label and graphs line for all names to print
+        labels = new LinkedHashMap<>();
+        graphs = new LinkedHashMap<>();
+
+        // get every name to print
+        Set<String> keys = entryDataSet.keySet();
+        // for every name
+        for (String key : keys) {
+            // Calculate and create y-coordinates for points on the graph
+            double[] yCoordinates = getYCoordinates(key);
+            // create array for labels
+            GLabel[] labelsForName = createLabelsForName(key, yCoordinates, colorIndex);
+            // and lines
+            GLine[] linesForNamesGraph = createGraphsLinesForName(yCoordinates, colorIndex);
+
+            // add info to the collection if there wasn't the same
+            labels.putIfAbsent(key, labelsForName);
+            graphs.putIfAbsent(key, linesForNamesGraph);
+
+            // change colorIndex for next name
+            colorIndex++;
+        }
+    }
+
+    /***
+     * Create lines for name with given color and appropriate coordinates
+     *
+     * @param yCoordinates  calculated y-coordinates for points on the graph
+     * @param colorIndex    index in a color array
+     * @return              an array of lines in graph for the name
+     */
+    private GLine[] createGraphsLinesForName(double[] yCoordinates, int colorIndex) {
+        GLine[] linesForNamesGraph = new GLine[NDECADES];
+        // create every line in graph except the latest
+        for (int i = 0; i < NDECADES - 1; i++) {
+            // get coordinates of start and end points
+            double x1 = decadeLines[i].getX();
+            double y1 = yCoordinates[i];
+            double x2 = decadeLines[i + 1].getX();
+            double y2= yCoordinates[i+1];
+            // create line
+            linesForNamesGraph[i] = new GLine(x1, y1, x2, y2);
+            // and set color for it
+            linesForNamesGraph[i].setColor(setColorForName(colorIndex));
+        }
+        // and the same procedure for the latest line in the graph
+        double x1 = decadeLines[NDECADES - 1].getX();
+        double y1 = yCoordinates[NDECADES - 1];
+        double x2 = decadeLines[NDECADES - 2].getX();
+        double y2 = yCoordinates[NDECADES - 2];
+        linesForNamesGraph[NDECADES - 1] = new GLine(x1, y1, x2, y2);
+        linesForNamesGraph[NDECADES - 1].setColor(setColorForName(colorIndex));
+
+        return linesForNamesGraph;
+    }
+
+    /***
+     * Create labels for name with given color and appropriate coordinates
+     *
+     * @param key           name to print
+     * @param yCoordinates  calculated y-coordinates for points on the graph
+     * @param colorIndex    index in a color array
+     * @return              array of labels for the name
+     */
+    private GLabel[] createLabelsForName(String key, double[] yCoordinates, int colorIndex) {
+        GLabel[] labelsForName = new GLabel[NDECADES];
+        // create every decade name's label
+        for (int i = 0; i < NDECADES; i++) {
+            // get coordinates
+            double x1 = decadeLines[i].getX();
+            double y1 = yCoordinates[i];
+            // create label
+            labelsForName[i] = new GLabel(key + " " + entryDataSet.get(key)[i], x1, y1);
+            // and set color
+            labelsForName[i].setColor(setColorForName(colorIndex));
+        }
+        return labelsForName;
+    }
+
+    /**
+     * Create an array for y-coordinate
+     * for points of lines` start/end and labels.
+     *
+     * @param key   the name in collection of names to print
+     * @return      an array of y-coordinates
+     */
+    private double[] getYCoordinates(String key) {
+        // calculate distance between every rank value (for 1000 ranks) according to window height
+        double stepForRankGraph = (bottomLine.getY() - topLine.getY()) / MAX_RANK;
+        // create an array
+        double[] yCoordinates = new double[NDECADES];
+        for (int i = 0; i < NDECADES; i++) {
+            // get name`s rank for every decade
+            double rankOnDecade = entryDataSet.get(key)[i];
+            /* if there wasn't a name in the rank table in the decade,
+            * it means the rank = 0, set the position on the bottom line in the window
+            */
+            if (rankOnDecade == 0) {
+                yCoordinates[i] = bottomLine.getY();
+            } else {
+                // or calculate y-coordinate relatively to window's height
+                yCoordinates[i] = topLine.getY() + rankOnDecade * stepForRankGraph;
+            }
+        }
+        return yCoordinates;
+    }
+
+    /***
+     * Create an array with given colors for names and return one for use
+     *
+     * @param colorIndex    the number of color
+     * @return              the color to use
+     */
+    private Color setColorForName(int colorIndex) {
+        Color[] color = new Color[4];
+        color[0] = Color.BLUE;
+        color[1] = Color.RED;
+        color[2] = Color.MAGENTA;
+        color[3] = Color.BLACK;
+
+        // if there are more then 4 names to print, proceed from the beginning
+        colorIndex = colorIndex % color.length;
+        return color[colorIndex];
+    }
+
+    /***
+     * Display the info (graph and name's label) in the window
+     */
+    private void displayInWindow() {
+        // for every name in the collection of names from user to print
+        for (Map.Entry<String, GLabel[]> label : labels.entrySet()) {
+            // get name
+            String keyName = label.getKey();
+            // for all labels in the collection of labels for this name
+            for (GLabel gLabel : labels.get(keyName)) {
+                add(gLabel); // print it in the window
+            }
+        }
+
+        // and the same procedure for graphs` lines
+        for (Map.Entry<String, GLine[]> line : graphs.entrySet()) {
+            String keyName = line.getKey();
+            for (GLine gLine : graphs.get(keyName)) {
+                add(gLine);
+            }
+        }
+    }
 
     /* Implementation of the ComponentListener interface */
     public void componentHidden(ComponentEvent e) {

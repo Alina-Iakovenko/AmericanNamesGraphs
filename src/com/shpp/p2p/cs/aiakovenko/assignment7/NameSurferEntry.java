@@ -13,9 +13,10 @@ import com.sun.source.doctree.LiteralTree;
 import java.util.Arrays;
 
 public class NameSurferEntry implements NameSurferConstants {
+    // Name to print info about
     String name;
+    // Ranks for this name
     String[] ranks;
-
 
 	/* Constructor: NameSurferEntry(line) */
     /**
@@ -25,6 +26,7 @@ public class NameSurferEntry implements NameSurferConstants {
      * decade.
      */
     public NameSurferEntry(String line) {
+        // separate the line from a database to name and ranks
         String[] nameAndRank = line.split(" ",2);
         this.name = nameAndRank[0];
         this.ranks = nameAndRank[1].split(" ");
@@ -47,6 +49,7 @@ public class NameSurferEntry implements NameSurferConstants {
      * not appear in a decade, the rank value is 0.
      */
     public int getRank(int decade) {
+        // take a rank for an asked decade and parse it to int
         return Integer.parseInt(this.ranks[decade]);
     }
 
@@ -59,9 +62,11 @@ public class NameSurferEntry implements NameSurferConstants {
     public String toString() {
         StringBuilder result = new StringBuilder();
         result.append(name).append(" [");
+        // print every rank and space after it
         for (String rank : ranks) {
             result.append(rank).append(" ");
         }
+        // delete the latest space
         result.deleteCharAt(result.length() - 1);
         result.append("]");
 

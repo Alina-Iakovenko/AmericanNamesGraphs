@@ -22,7 +22,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class NameSurferDataBase implements NameSurferConstants {
-    ArrayList<String> namesDataArray;
+    // collection with info from the database file
+    ArrayList<NameSurferEntry> namesDataArray;
 
     /* Constructor: NameSurferDataBase(filename) */
 
@@ -34,40 +35,51 @@ public class NameSurferDataBase implements NameSurferConstants {
      */
     public NameSurferDataBase(String filename) {
         try {
-            BufferedReader br = new BufferedReader(new FileReader(NAMES_DATA_FILE));
+            // create instance of bufferedReader to read file
+            BufferedReader br = new BufferedReader(new FileReader(filename));
+            // create instance of ArrayList to collect info from the file
             this.namesDataArray = new ArrayList<>();
 
             while (true) {
-                String word = br.readLine();
-                if (word == null) {
+                // read all lines while not empty
+                String line = br.readLine();
+                if (line == null) {
                     break;
                 }
-                namesDataArray.add(word);
+                // add info to ArrayList
+                namesDataArray.add(new NameSurferEntry(line));
             }
             br.close();
-            /* For reference, let's see how many words there are. */
+            /* For reference, let's see how many lines there are. */
             System.out.println("Read " + namesDataArray.size() + " names.");
         } catch (IOException e) {
-            System.out.println("Something wrong with data file.");
-            throw new ErrorException(e);
+            throw new ErrorException("Something wrong with data file.");
         }
     }
 
     /* Method: findEntry(name) */
 
     /**
-     * Returns the NameSurferEntry associated with this name, if one
-     * exists.  If the name does not appear in the database, this
-     * method returns null.
+     * Finds the info for the name in the database
+     *
+     * @param name  string with name to find
+     *              (we take it from textField in the class NameSurfer)
+     * @return      Returns the NameSurferEntry associated with this name,
+     *              if one exists. If the name does not appear in the database,
+     *              this method returns null.
      */
     public NameSurferEntry findEntry(String name) {
-        NameSurferEntry infoForName;
+        /*
+        * For every line in dataBase (while name isn't found)
+        * check if the name from user is equal to the name in the line
+        */
         for (int i = 0; i < namesDataArray.size(); i++) {
-            infoForName = new NameSurferEntry(namesDataArray.get(i));
-            if (infoForName.getName().toLowerCase().equals(name.toLowerCase())) {
-                return infoForName;
+            String nameFromDataBase = namesDataArray.get(i).getName().toLowerCase();
+            if (nameFromDataBase.equals(name.toLowerCase())) {
+                return namesDataArray.get(i);
             }
         }
+        // return a message to console (but I'd like to return it to screen, but...)
         System.out.println("Sorry - we haven`t info for this name");
         return null;
     }
