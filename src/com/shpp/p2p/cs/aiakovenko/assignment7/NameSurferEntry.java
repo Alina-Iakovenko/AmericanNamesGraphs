@@ -8,15 +8,11 @@ package com.shpp.p2p.cs.aiakovenko.assignment7;
  * of that name for each decade stretching back to 1900.
  */
 
-import com.sun.source.doctree.LiteralTree;
-
-import java.util.Arrays;
-
 public class NameSurferEntry implements NameSurferConstants {
     // Name to print info about
-    String name;
+    final String name;
     // Ranks for this name
-    String[] ranks;
+    final String[] ranks;
 
 	/* Constructor: NameSurferEntry(line) */
     /**

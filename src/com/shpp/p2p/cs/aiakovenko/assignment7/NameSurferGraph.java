@@ -10,15 +10,11 @@ package com.shpp.p2p.cs.aiakovenko.assignment7;
  */
 
 import acm.graphics.*;
-import acm.program.Program;
-import acm.util.RandomGenerator;
 
+import javax.swing.*;
 import java.awt.*;
-import java.awt.List;
 import java.awt.event.*;
 import java.util.*;
-
-import static acm.util.JTFTools.pause;
 
 public class NameSurferGraph extends GCanvas
         implements NameSurferConstants, ComponentListener {
@@ -27,16 +23,17 @@ public class NameSurferGraph extends GCanvas
     // The horizontal line on the bottom
     GLine bottomLine;
     // Vertical lines for every decade
-    GLine[] decadeLines = new GLine[NDECADES];
+    final GLine[] decadeLines = new GLine[NDECADES];
     // Text with a year of beginning for every decade
-    GLabel[] decadeLabels = new GLabel[NDECADES];
+    final GLabel[] decadeLabels = new GLabel[NDECADES];
 
     // Collection for names from user to print
-    LinkedHashMap<String, int[]> entryDataSet = new LinkedHashMap<>();
+    final LinkedHashMap<String, int[]> entryDataSet = new LinkedHashMap<>();
     // Collection for all labels to print
     LinkedHashMap<String, GLabel[]> labels = new LinkedHashMap<>();
     // Collection for all lines to print
     LinkedHashMap<String, GLine[]> graphs = new LinkedHashMap<>();
+    JButton noNameButton;
 
     /**
      * Creates a new NameSurferGraph object that displays the data.
@@ -46,7 +43,6 @@ public class NameSurferGraph extends GCanvas
         update();
     }
 
-
     /**
      * Clears the list of name surfer entries stored inside this class.
      */
@@ -54,20 +50,21 @@ public class NameSurferGraph extends GCanvas
         if (entryDataSet != null) {
             // method from the class LinkedHashMap to clear the collection
             entryDataSet.clear();
-            update();
         }
     }
-
 
     /* Method: addEntry(entry) */
 
     /**
      * Adds a new NameSurferEntry to the list of entries on the display.
-     * Note that this method does not actually draw the graph, but
+     * Note that this method does not draw the graph, but
      * simply stores the entry; the graph is drawn by calling update.
      */
     public void addEntry(NameSurferEntry entry) {
-        try {
+        if (entry == null) {
+            // if there is no name - create button with this info
+            createNoNameButton();
+        } else {
             // Get name with the method from the NameSurferEntry class
             String name = entry.getName();
             // Create an array for ranks for the name
@@ -79,10 +76,32 @@ public class NameSurferGraph extends GCanvas
             }
             // Add info to LinkedHashMap if there isn't the same
             entryDataSet.putIfAbsent(name, ranks);
-        } catch (NullPointerException e) {
-            // throw an exception if there isn't such a name in the database
-            throw new NullPointerException("No match in data base for this name");
         }
+    }
+
+    /**
+     *  Create a button with information for when no match is found for the name.
+     **/
+    private void createNoNameButton() {
+        // create button with text formatted with HTML rules
+        noNameButton = new JButton("<html><center>No match with this name found.<br><font size='2'>Click the button to close it and proceed</font></center></html>");
+        noNameButton.setFont(new Font("Arial", Font.BOLD, 20));
+        noNameButton.setForeground(Color.RED);
+
+        // add actionListener to be able to close the button using anonymous interface implementation
+        noNameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                remove(noNameButton);
+                noNameButton = null;
+            }
+        });
+
+//        // previous piece of code can be simplified with lambda:
+//        noNameButton.addActionListener(e -> {
+//            remove(noNameButton);
+//            noNameButton = null;
+//        });
     }
 
 
@@ -95,20 +114,25 @@ public class NameSurferGraph extends GCanvas
      */
     public void update() {
         /* Print to horizontal lines (there will be graphs between them)
-        * and vertical lines for each decade and year of the beginning
-        */
+         * and vertical lines for each decade and year of the beginning
+         */
         createDecadesTable();
         // Print info for names (graphs and name with rank for every decade)
         createGraphsOnDecadesTable();
+        if (noNameButton != null) {
+            add(noNameButton);
+            noNameButton.setLocation(getWidth() / 2 - noNameButton.getWidth() / 2, getHeight() / 2 - noNameButton.getHeight() / 2);
+
+        }
     }
 
     /**
      * Print or reprint vertical lines for each decade
      * and year of the beginning according to window size
-     * */
+     */
     private void createDecadesTable() {
         // calculate the distance between vertical lines according to actual window width
-        double distanceBetweenDecades = getWidth() / NDECADES;
+        double distanceBetweenDecades = (double) getWidth() / NDECADES;
         // Create horizontal top line
         topLine = new GLine(0, GRAPH_MARGIN_SIZE, getWidth(), GRAPH_MARGIN_SIZE);
         topLine.setColor(Color.BLACK);
@@ -125,7 +149,7 @@ public class NameSurferGraph extends GCanvas
 
         // for every decade line
         for (int i = 0; i < NDECADES; i++) {
-            // if there is decade line in the window, delete it
+            // if there is a decade line in the window, delete it
             if (decadeLines[i] != null) {
                 remove(decadeLines[i]);
             }
@@ -147,7 +171,7 @@ public class NameSurferGraph extends GCanvas
     /**
      * Print or reprint graphs and text info for it
      * (name and rank in the decade) for every name chose by user
-     * */
+     */
     private void createGraphsOnDecadesTable() {
         // if there is info on the table - delete it
         if (!(labels.isEmpty()) || !(graphs.isEmpty())) {
@@ -221,7 +245,7 @@ public class NameSurferGraph extends GCanvas
      *
      * @param yCoordinates  calculated y-coordinates for points on the graph
      * @param colorIndex    index in a color array
-     * @return              an array of lines in graph for the name
+     * @return an array of lines in graph for the name
      */
     private GLine[] createGraphsLinesForName(double[] yCoordinates, int colorIndex) {
         GLine[] linesForNamesGraph = new GLine[NDECADES];
@@ -231,7 +255,7 @@ public class NameSurferGraph extends GCanvas
             double x1 = decadeLines[i].getX();
             double y1 = yCoordinates[i];
             double x2 = decadeLines[i + 1].getX();
-            double y2= yCoordinates[i+1];
+            double y2 = yCoordinates[i + 1];
             // create line
             linesForNamesGraph[i] = new GLine(x1, y1, x2, y2);
             // and set color for it
@@ -254,7 +278,7 @@ public class NameSurferGraph extends GCanvas
      * @param key           name to print
      * @param yCoordinates  calculated y-coordinates for points on the graph
      * @param colorIndex    index in a color array
-     * @return              array of labels for the name
+     * @return array of labels for the name
      */
     private GLabel[] createLabelsForName(String key, double[] yCoordinates, int colorIndex) {
         GLabel[] labelsForName = new GLabel[NDECADES];
@@ -275,8 +299,8 @@ public class NameSurferGraph extends GCanvas
      * Create an array for y-coordinate
      * for points of lines` start/end and labels.
      *
-     * @param key   the name in collection of names to print
-     * @return      an array of y-coordinates
+     * @param key the name in collection of names to print
+     * @return an array of y-coordinates
      */
     private double[] getYCoordinates(String key) {
         // calculate distance between every rank value (for 1000 ranks) according to window height
@@ -287,8 +311,8 @@ public class NameSurferGraph extends GCanvas
             // get name`s rank for every decade
             double rankOnDecade = entryDataSet.get(key)[i];
             /* if there wasn't a name in the rank table in the decade,
-            * it means the rank = 0, set the position on the bottom line in the window
-            */
+             * it means the rank = 0, set the position on the bottom line in the window
+             */
             if (rankOnDecade == 0) {
                 yCoordinates[i] = bottomLine.getY();
             } else {
@@ -302,8 +326,8 @@ public class NameSurferGraph extends GCanvas
     /***
      * Create an array with given colors for names and return one for use
      *
-     * @param colorIndex    the number of color
-     * @return              the color to use
+     * @param colorIndex    the number of colors
+     * @return the color to use
      */
     private Color setColorForName(int colorIndex) {
         Color[] color = new Color[4];

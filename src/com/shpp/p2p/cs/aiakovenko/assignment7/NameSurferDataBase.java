@@ -11,11 +11,7 @@ package com.shpp.p2p.cs.aiakovenko.assignment7;
  * and "ERIC" are the same names.
  */
 
-import acm.graphics.GLabel;
 import acm.util.ErrorException;
-import com.shpp.cs.a.graphics.WindowProgram;
-
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

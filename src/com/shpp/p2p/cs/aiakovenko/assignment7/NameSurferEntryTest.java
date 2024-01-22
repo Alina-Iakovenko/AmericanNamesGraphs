@@ -3,10 +3,10 @@ package com.shpp.p2p.cs.aiakovenko.assignment7;
 import static org.junit.jupiter.api.Assertions.*;
 
 class NameSurferEntryTest {
-    NameSurferEntry John = new NameSurferEntry("John 10 20 30 40 50 60 70 80 90 100 0 999");
-    NameSurferEntry Alice = new NameSurferEntry("Alice 5 15 25 35 45 55 65 75 85 95 105 965");
-    NameSurferEntry Bob = new NameSurferEntry("Bob 1 2 3 4 5 6 7 8 9 10 11 12");
-    NameSurferEntry Jack = new NameSurferEntry("Jack 0 0 0 0 0 0 0 0 0 0 0 0");
+    final NameSurferEntry John = new NameSurferEntry("John 10 20 30 40 50 60 70 80 90 100 0 999");
+    final NameSurferEntry Alice = new NameSurferEntry("Alice 5 15 25 35 45 55 65 75 85 95 105 965");
+    final NameSurferEntry Bob = new NameSurferEntry("Bob 1 2 3 4 5 6 7 8 9 10 11 12");
+    final NameSurferEntry Jack = new NameSurferEntry("Jack 0 0 0 0 0 0 0 0 0 0 0 0");
 
     @org.junit.jupiter.api.Test
     void testGetName() {

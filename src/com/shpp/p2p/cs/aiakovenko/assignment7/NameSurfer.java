@@ -7,11 +7,9 @@ package com.shpp.p2p.cs.aiakovenko.assignment7;
  * the baby-name database described in the assignment handout.
  */
 
-import acm.graphics.GLabel;
 import com.shpp.cs.a.simple.SimpleProgram;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 
 public class NameSurfer extends SimpleProgram implements NameSurferConstants {
@@ -21,7 +19,7 @@ public class NameSurfer extends SimpleProgram implements NameSurferConstants {
     private NameSurferGraph graph;
 
     /* Instance of NameSurferDataBase with a database for names */
-    NameSurferDataBase dataBase = new NameSurferDataBase(NAMES_DATA_FILE);
+    final NameSurferDataBase DATA_BASE = new NameSurferDataBase(NAMES_DATA_FILE);
 
     /**
      * This method has the responsibility for reading in the data base
@@ -60,14 +58,18 @@ public class NameSurfer extends SimpleProgram implements NameSurferConstants {
             // get text that user printed in text field
             String name = nameField.getText();
             // check if there is such a name in database file and create an instance for it
-            NameSurferEntry nameInfo = dataBase.findEntry(name);
+            NameSurferEntry nameInfo = DATA_BASE.findEntry(name);
             // add info to LinkedHashMap - collection of instance to print
             graph.addEntry(nameInfo);
             // display info in the window
             graph.update();
         } else if (e.getSource() == clearButton) {
-            // method from the class NameSurferGraph to reset all names and graphs for them
+            // method from the class NameSurferGraph to reset all names
             graph.clear();
+            // and clear the window
+            graph.update();
         }
+//        System.out.println(e.getActionCommand());
+
     }
 }
