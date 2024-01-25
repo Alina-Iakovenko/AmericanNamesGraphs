@@ -4,14 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f969e0c3-ed1d-4d59-88c6-f9ff52ca802f" name="Changes" comment="completed but need refactoring in NameSurferDataBase according to task">
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
+    <list default="true" id="f969e0c3-ed1d-4d59-88c6-f9ff52ca802f" name="Changes" comment="added a button with information for when no match is found for the name.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/shpp/p2p/cs/aiakovenko/assignment7/NameSurfer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/shpp/p2p/cs/aiakovenko/assignment7/NameSurfer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/shpp/p2p/cs/aiakovenko/assignment7/NameSurferDataBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/shpp/p2p/cs/aiakovenko/assignment7/NameSurferDataBase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/shpp/p2p/cs/aiakovenko/assignment7/NameSurferEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/shpp/p2p/cs/aiakovenko/assignment7/NameSurferEntry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/shpp/p2p/cs/aiakovenko/assignment7/NameSurferGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/shpp/p2p/cs/aiakovenko/assignment7/NameSurferGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/shpp/p2p/cs/aiakovenko/assignment7/NameSurferGraph.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +33,9 @@
   <component name="HierarchyBrowserManager">
     <option name="SCOPE" value="All" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -47,32 +48,34 @@
     <option name="showLibraryContents" value="true" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Application.NameSurfer.executor": "Run",
-    "Application.NoNameException.executor": "Run",
-    "Downloaded.Files.Path.Enabled": "true",
-    "JUnit.NameSurferEntryTest.executor": "Run",
-    "JUnit.NameSurferEntryTest.testGetName.executor": "Run",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "create.test.in.the.same.root": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/StudyingIT/sh++/computerScience/week4",
-    "project.structure.last.edited": "Problems",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Application.NameSurfer.executor&quot;: &quot;Run&quot;,
+    &quot;Application.NoNameException.executor&quot;: &quot;Run&quot;,
+    &quot;Application.com.shpp.p2p.cs.ochumachenko.assignment7.NameSurfer.executor&quot;: &quot;Run&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;true&quot;,
+    &quot;JUnit.NameSurferEntryTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.NameSurferEntryTest.testGetName.executor&quot;: &quot;Run&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;create.test.in.the.same.root&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/StudyingIT/sh++/computerScience/week4&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.folding&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
@@ -101,6 +104,19 @@
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.shpp.p2p.cs.aiakovenko.assignment7.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="com.shpp.p2p.cs.ochumachenko.assignment7.NameSurfer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.shpp.p2p.cs.ochumachenko.assignment7.NameSurfer" />
+      <module name="week7" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.shpp.p2p.cs.ochumachenko.assignment7.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -142,16 +158,17 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.NameSurfer" />
-        <item itemvalue="Application.NoNameException" />
         <item itemvalue="JUnit.NameSurferEntryTest" />
+        <item itemvalue="Application.com.shpp.p2p.cs.ochumachenko.assignment7.NameSurfer" />
         <item itemvalue="JUnit.NameSurferEntryTest.testGetName" />
+        <item itemvalue="Application.NoNameException" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-18.0.2-corretto-18.0.2-f644763e9732-da6bd485" />
+        <option value="jdk-18.0.2-corretto-18.0.2-4caba194b151-5720f15e" />
       </set>
     </attachedChunks>
   </component>
@@ -172,14 +189,42 @@
       <option name="project" value="LOCAL" />
       <updated>1705852804084</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="refactored NameSurferDataBase according to task (save info from the file in ArrayList&lt;NameSurferEntry&gt;)&#10;&#10;some more refactoring for better decomposition in NameSurferGraph&#10;&#10;commentaries added">
+      <option name="closed" value="true" />
+      <created>1705867120151</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1705867120151</updated>
+    </task>
+    <task id="LOCAL-00003" summary="added a button with information for when no match is found for the name.">
+      <option name="closed" value="true" />
+      <created>1705934644199</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1705934644199</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="completed but need refactoring in NameSurferDataBase according to task" />
-    <option name="LAST_COMMIT_MESSAGE" value="completed but need refactoring in NameSurferDataBase according to task" />
+    <MESSAGE value="refactored NameSurferDataBase according to task (save info from the file in ArrayList&lt;NameSurferEntry&gt;)&#10;&#10;some more refactoring for better decomposition in NameSurferGraph&#10;&#10;commentaries added" />
+    <MESSAGE value="added a button with information for when no match is found for the name." />
+    <option name="LAST_COMMIT_MESSAGE" value="added a button with information for when no match is found for the name." />
   </component>
   <component name="com.gk646.codestats.settings.Save">
+    <option name="commitTimePoints">
+      <list>
+        <TimePoint>
+          <option name="timestamp" value="1705867120250" />
+          <option name="linesCode" value="302" />
+          <option name="totalLines" value="5224" />
+          <option name="info" value="refactored NameSurferData" />
+        </TimePoint>
+      </list>
+    </option>
     <option name="genericTimePoints">
       <list>
         <TimePoint>
@@ -187,6 +232,18 @@
           <option name="linesCode" value="173" />
           <option name="totalLines" value="4949" />
           <option name="info" value="19 січ. 2024 р." />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1705867120250" />
+          <option name="linesCode" value="302" />
+          <option name="totalLines" value="5224" />
+          <option name="info" value="21 січ. 2024 р." />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1705920054528" />
+          <option name="linesCode" value="294" />
+          <option name="totalLines" value="5213" />
+          <option name="info" value="22 січ. 2024 р." />
         </TimePoint>
       </list>
     </option>

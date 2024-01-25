@@ -10,9 +10,9 @@ package com.shpp.p2p.cs.aiakovenko.assignment7;
 
 public class NameSurferEntry implements NameSurferConstants {
     // Name to print info about
-    final String name;
+    String name;
     // Ranks for this name
-    final String[] ranks;
+    int[] ranks = new int[NDECADES];
 
 	/* Constructor: NameSurferEntry(line) */
     /**
@@ -20,12 +20,16 @@ public class NameSurferEntry implements NameSurferConstants {
      * in the data file.  Each line begins with the name, which is
      * followed by integers giving the rank of that name for each
      * decade.
+     *
+     * @param line a string from database with name and ranks
      */
     public NameSurferEntry(String line) {
         // separate the line from a database to name and ranks
         String[] nameAndRank = line.split(" ",2);
         this.name = nameAndRank[0];
-        this.ranks = nameAndRank[1].split(" ");
+        for (int i = 0; i < NDECADES; i++) {
+            this.ranks[i] = Integer.parseInt(nameAndRank[1].split(" ")[i]);
+        }
     }
 
 	/* Method: getName() */
@@ -43,10 +47,12 @@ public class NameSurferEntry implements NameSurferConstants {
      * decades have passed since the first year in the database,
      * which is given by the constant START_DECADE.  If a name does
      * not appear in a decade, the rank value is 0.
+     *
+     * @param decade a number of the decade for which we need rank
      */
     public int getRank(int decade) {
         // take a rank for an asked decade and parse it to int
-        return Integer.parseInt(this.ranks[decade]);
+        return this.ranks[decade];
     }
 
 	/* Method: toString() */
@@ -59,7 +65,7 @@ public class NameSurferEntry implements NameSurferConstants {
         StringBuilder result = new StringBuilder();
         result.append(name).append(" [");
         // print every rank and space after it
-        for (String rank : ranks) {
+        for (int rank : ranks) {
             result.append(rank).append(" ");
         }
         // delete the latest space
